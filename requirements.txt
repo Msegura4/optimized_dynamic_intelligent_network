@@ -2,3 +2,4 @@ groq
 python-dotenv
 streamlit
 pybase64
+edge-tts

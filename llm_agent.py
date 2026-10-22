@@ -2,12 +2,14 @@ from groq import Groq
 import base64
 from dotenv import load_dotenv
 import os
+import edge_tts
 
 
 class ConversationAgent:
     def __init__(self):
         load_dotenv()
         self.groq_client = Groq(api_key=os.environ["GROQ_KEY"])
+        self.voice = "fr-FR-DeniseNeural"
         self.conversation_history = [
                 {
                     "role": "system",
@@ -72,6 +74,15 @@ class ConversationAgent:
 
         return transcription.text
 
+    def synthesize_speech(self, text_to_read):
+        speech_stream = edge_tts.Communicate(text_to_read, self.voice)
+        audio_bytes = b""
+        for stream_chunk in speech_stream.stream_sync():
+            if stream_chunk["type"] == "audio":
+                audio_bytes += stream_chunk["data"]
+
+        return audio_bytes
+
 
 
 
@@ -87,3 +98,5 @@ class ConversationAgent:
 
 
         self.update_conversation_history(role="assistant", text_interaction=response)
+
+        return response

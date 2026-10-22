@@ -34,7 +34,22 @@ class UserInterface:
         for message in self.conversation_agent_object.get_conversation_history():
             self.display_message(message)
 
+    @staticmethod
+    @st.fragment
+    def display_audio_response_toggle():
+        st.checkbox("Réponse audio", key="is_audio_response_enabled")
+
+    def play_audio_response(self, llm_response):
+        audio_response = self.conversation_agent_object.synthesize_speech(
+            llm_response
+        )
+        st.audio(audio_response, format="audio/mp3", autoplay=True)
+
     def run(self):
+        with st.sidebar:
+            self.display_audio_response_toggle()
+        is_audio_response_enabled = st.session_state.is_audio_response_enabled
+
         user_interaction = st.chat_input(
             "ODIN pour te servir, dis moi ce dont tu as besoin ?",
             accept_file=True,
@@ -54,8 +69,13 @@ class UserInterface:
                 user_interaction.files[0].getvalue() if user_interaction.files else None
             )
 
-            self.conversation_agent_object.ask_llm(text_interaction, image)
+            llm_response = self.conversation_agent_object.ask_llm(
+                text_interaction, image
+            )
             self.show_discussion_history()
+
+            if is_audio_response_enabled:
+                self.play_audio_response(llm_response)
 
 
 if __name__ == "__main__":
