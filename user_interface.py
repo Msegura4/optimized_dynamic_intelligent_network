@@ -6,10 +6,10 @@ class UserInterface:
 	def __init__(self):
 		st.set_page_config(page_title="Jarvis")
 		st.title("Jarvis")
-		self.conversation_agent_object = self.get_persistant_conversation_agent()
+		self.conversation_agent_object = self.get_persistent_conversation_agent()
 
 
-	def get_persistant_conversation_agent(self):
+	def get_persistent_conversation_agent(self):
 		
 		if "conversation_agent_object" not in st.session_state:
 			st.session_state.conversation_agent_object = ConversationAgent()
@@ -41,7 +41,7 @@ class UserInterface:
 
 	def run(self):
 		user_interaction = st.chat_input(
-			"Que veux tu moussaillon ?",
+			"Que veux-tu, moussaillon ?",
 			accept_file=True,
 			accept_audio=True,
 			file_type=["jpg", "jpeg", "png"],
@@ -63,51 +63,3 @@ class UserInterface:
 if __name__ == "__main__":
 	user_interface_object = UserInterface()
 	user_interface_object.run()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	# response = ask_llm(user_input)
-	# with st.chat_message("user"):
-	# 	st.markdown(user_input)
-
-	# with st.chat_message("system"):
-	# 	st.markdown(response)
-
-
